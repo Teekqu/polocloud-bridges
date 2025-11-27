@@ -1,32 +1,40 @@
 plugins {
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
+    id("com.gradleup.shadow") version "9.2.2"
     kotlin("jvm") version "2.2.21"
     `maven-publish`
 }
 
-group = "dev.httpmarco.polocloud"
-version = "3.0.0-pre.8-SNAPSHOT"
+allprojects {
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "com.gradleup.shadow")
+    apply(plugin = "maven-publish")
 
-repositories {
-    mavenCentral()
-    maven {
-        name = "polocloud-snapshots"
-        url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+    group = "dev.httpmarco.polocloud"
+    version = "3.0.0-pre.8-SNAPSHOT"
+
+    repositories {
+        mavenCentral()
+        maven {
+            name = "polocloud-snapshots"
+            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+        }
+    }
+
+    dependencies {
+        api("dev.httpmarco.polocloud:sdk-java:3.0.0-pre.8-SNAPSHOT")
     }
 }
 
-dependencies {
-    api("dev.httpmarco.polocloud:sdk-java:3.0.0-pre.8-SNAPSHOT")
-}
 
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
 
-            artifact(tasks.jar.get())
+            artifact(tasks.shadowJar.get())
 
             pom {
-                name.set("polocloud-proto")
+                name.set("polocloud-bridges")
                 description.set("PoloCloud gRPC API with bundled dependencies")
                 url.set("https://github.com/thePolocloud/polocloud")
 
@@ -62,6 +70,6 @@ nexusPublishing {
             password.set(System.getenv("ossrhPassword") ?: "")
         }
     }
-    useStaging.set(!project.rootProject.version.toString().endsWith("-SNAPSHOT"))
+    useStaging.set(!version.toString().endsWith("-SNAPSHOT"))
 }
 

@@ -17,7 +17,7 @@ repositories {
 
 dependencies {
     compileOnly(libs.waterdog)
-    api(projects.bridges.bridgeApi)
+    api(projects.bridgeApi)
 }
 
 tasks.processResources {

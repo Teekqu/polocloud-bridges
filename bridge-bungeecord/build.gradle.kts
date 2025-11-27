@@ -13,7 +13,7 @@ repositories {
 
 
 dependencies {
-    implementation(projects.bridges.bridgeApi)
+    implementation(projects.bridgeApi)
     implementation(libs.bstats.bungeecord)
     compileOnly(libs.bungeecord)
 
