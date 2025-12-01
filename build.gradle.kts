@@ -22,10 +22,13 @@ allprojects {
     }
 
     dependencies {
-        api("dev.httpmarco.polocloud:sdk-java:3.0.0-pre.8-SNAPSHOT")
+        implementation("dev.httpmarco.polocloud:sdk-java:3.0.0-pre.8-SNAPSHOT")
+    }
+
+    kotlin {
+        jvmToolchain(21)
     }
 }
-
 
 publishing {
     publications {

@@ -1,6 +1,12 @@
 package dev.httpmarco.polocloud.bridge.api
 
 import dev.httpmarco.polocloud.shared.PolocloudShared
+import dev.httpmarco.polocloud.shared.events.Event
+import dev.httpmarco.polocloud.shared.events.definitions.service.ServiceChangeStateEvent
+import dev.httpmarco.polocloud.shared.service.Service
+import dev.httpmarco.polocloud.v1.groups.GroupType
+import dev.httpmarco.polocloud.v1.services.ServiceState
+import dev.httpmarco.polocloud.sdk.java.Polocloud
 
 /**
  * Abstract class for bridging services to a proxy (e.g., Velocity, BungeeCord).
