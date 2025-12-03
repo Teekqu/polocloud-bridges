@@ -65,6 +65,16 @@ allprojects {
     }
 }
 
+subprojects {
+    afterEvaluate {
+        tasks.matching { it.name == "shadowJar" }.configureEach {
+            if (project.path != ":bridge-api") {
+                dependsOn(":bridge-api:shadowJar")
+            }
+        }
+    }
+}
+
 
 nexusPublishing {
     repositories {
