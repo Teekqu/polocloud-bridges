@@ -28,40 +28,43 @@ allprojects {
     kotlin {
         jvmToolchain(21)
     }
-}
 
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
+    tasks.shadowJar {
+        archiveClassifier.set(null)
+    }
 
-            artifact(tasks.shadowJar.get())
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
+                from(components["java"])
 
-            pom {
-                name.set("polocloud-bridges")
-                description.set("PoloCloud gRPC API with bundled dependencies")
-                url.set("https://github.com/thePolocloud/polocloud")
-
-                licenses {
-                    license {
-                        name.set("Apache License 2.0")
-                        url.set("https://www.apache.org/licenses/LICENSE-2.0")
-                    }
-                }
-                developers {
-                    developer {
-                        name.set("Mirco Lindenau")
-                        email.set("mirco.lindenau@gmx.de")
-                    }
-                }
-                scm {
+                pom {
+                    description.set("PoloCloud gRPC API with bundled dependencies")
                     url.set("https://github.com/thePolocloud/polocloud")
-                    connection.set("scm:git:https://github.com/thePolocloud/polocloud.git")
-                    developerConnection.set("scm:git:https://github.com/thePolocloud/polocloud.git")
+
+                    licenses {
+                        license {
+                            name.set("Apache License 2.0")
+                            url.set("https://www.apache.org/licenses/LICENSE-2.0")
+                        }
+                    }
+                    developers {
+                        developer {
+                            name.set("Mirco Lindenau")
+                            email.set("mirco.lindenau@gmx.de")
+                        }
+                    }
+                    scm {
+                        url.set("https://github.com/thePolocloud/polocloud")
+                        connection.set("scm:git:https://github.com/thePolocloud/polocloud.git")
+                        developerConnection.set("scm:git:https://github.com/thePolocloud/polocloud.git")
+                    }
                 }
             }
         }
     }
 }
+
 
 nexusPublishing {
     repositories {
