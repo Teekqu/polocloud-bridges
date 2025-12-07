@@ -22,7 +22,7 @@ allprojects {
     }
 
     dependencies {
-        implementation("dev.httpmarco.polocloud:sdk-java:3.0.0-pre.8-SNAPSHOT")
+        api("dev.httpmarco.polocloud:sdk-java:3.0.0-pre.8-SNAPSHOT")
     }
 
     kotlin {
