@@ -68,6 +68,20 @@ subprojects {
             }
         }
     }
+
+    tasks.withType<PublishToMavenRepository>().configureEach {
+        doFirst {
+            val pub = publication
+            println("=== Publishing: ${pub.name} to ${repository.url} ===")
+
+            pub.artifacts.forEach { art ->
+                println(" -> File: ${art.file.absolutePath}")
+                println(" -> Filename: ${art.file.name}")
+            }
+
+            println("========================================")
+        }
+    }
 }
 
 nexusPublishing {
