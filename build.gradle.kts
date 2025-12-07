@@ -6,10 +6,6 @@ plugins {
 }
 
 allprojects {
-    apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "com.gradleup.shadow")
-    apply(plugin = "maven-publish")
-
     group = "dev.httpmarco.polocloud"
     version = "3.0.0-pre.8-SNAPSHOT"
 
@@ -21,16 +17,25 @@ allprojects {
         }
     }
 
+}
+
+subprojects {
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    if (name != "bridge-api") {
+        apply(plugin = "com.gradleup.shadow")
+
+        tasks.shadowJar {
+            archiveClassifier.set(null)
+        }
+    }
+    apply(plugin = "maven-publish")
+
     dependencies {
         api("dev.httpmarco.polocloud:sdk-java:3.0.0-pre.8-SNAPSHOT")
     }
 
     kotlin {
         jvmToolchain(21)
-    }
-
-    tasks.shadowJar {
-        archiveClassifier.set(null)
     }
 
     publishing {
