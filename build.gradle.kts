@@ -26,6 +26,8 @@ subprojects {
 
         tasks.shadowJar {
             archiveClassifier.set(null)
+
+            mergeServiceFiles()
         }
     }
     apply(plugin = "maven-publish")
