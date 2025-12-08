@@ -21,7 +21,7 @@ allprojects {
 
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
-    if (name != "bridge-api") {
+    if (name != "bridge-api" || name != "bridge-fabric") {
         apply(plugin = "com.gradleup.shadow")
 
         tasks.shadowJar {
