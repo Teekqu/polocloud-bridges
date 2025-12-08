@@ -16,7 +16,7 @@ rootProject.name = "bridges"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include("bridge-api")
-include("bridge-gate")
+    //include("bridge-gate")
 include("bridge-velocity")
 include("bridge-fabric")
 include("bridge-bungeecord")
