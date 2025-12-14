@@ -1,5 +1,6 @@
 package dev.httpmarco.polocloud.bridges.waterdog
 
+import dev.httpmarco.polocloud.bridge.api.BridgeActorSupportInstance
 import dev.httpmarco.polocloud.bridge.api.BridgeInstance
 import dev.httpmarco.polocloud.shared.events.definitions.PlayerJoinEvent
 import dev.httpmarco.polocloud.shared.events.definitions.PlayerLeaveEvent
@@ -15,7 +16,9 @@ import dev.waterdog.waterdogpe.network.serverinfo.ServerInfo
 import dev.waterdog.waterdogpe.player.ProxiedPlayer
 import java.net.InetSocketAddress
 
-class WaterdogBridgeInstance : BridgeInstance<BedrockServerInfo, BedrockServerInfo>(), IJoinHandler {
+class WaterdogBridgeInstance : BridgeActorSupportInstance<BedrockServerInfo, BedrockServerInfo>(
+    WaterdogPlayerActorService()
+), IJoinHandler {
 
     init {
         this.processBind()

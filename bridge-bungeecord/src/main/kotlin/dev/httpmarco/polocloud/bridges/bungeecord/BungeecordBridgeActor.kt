@@ -31,6 +31,10 @@ class BungeecordBridgeActor : BridgeActor {
                 .setErrorMessage("Player is not online.").build()
         )
 
+        if(player.server.info.name.equals(server, true)){
+            return CompletableFuture.completedFuture(PlayerActorResponse.newBuilder().setSuccess(false).setErrorMessage("The player is already on this server!").build())
+        }
+
         val serverInfo = ProxyServer.getInstance().getServerInfo(server) ?: return CompletableFuture.completedFuture(
             PlayerActorResponse.newBuilder().setSuccess(false)
                 .setErrorMessage("Server info is not present.").build()
@@ -38,9 +42,9 @@ class BungeecordBridgeActor : BridgeActor {
 
         val future = CompletableFuture<PlayerActorResponse>()
 
-        player.connect(serverInfo, { result, error ->
+        player.connect(serverInfo) { result, error ->
             future.complete(PlayerActorResponse.newBuilder().setSuccess(result).setErrorMessage(error.message).build())
-        })
+        }
         return future
     }
 }

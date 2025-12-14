@@ -59,6 +59,11 @@ class VelocityPlayerActorBridge(val server: ProxyServer) : BridgeActor {
             )
         }
 
+        val currentServer = player.currentServer.getOrNull()
+        if(currentServer != null && currentServer.serverInfo.name.equals(server, true)){
+            return CompletableFuture.completedFuture(PlayerActorResponse.newBuilder().setSuccess(false).setErrorMessage("The player is already on this server!").build())
+        }
+
         val server = this.server.getServer(server).getOrNull() ?: return CompletableFuture.completedFuture(
             PlayerActorResponse.newBuilder().setSuccess(false)
                 .setErrorMessage("Server is not present.").build()
