@@ -12,6 +12,7 @@ import com.velocitypowered.api.proxy.server.RegisteredServer
 import com.velocitypowered.api.proxy.server.ServerInfo
 import dev.httpmarco.polocloud.bridge.api.BridgeActorSupportInstance
 import dev.httpmarco.polocloud.bridge.api.BridgeInstance
+import dev.httpmarco.polocloud.sdk.java.Polocloud
 import dev.httpmarco.polocloud.shared.events.definitions.PlayerJoinEvent
 import dev.httpmarco.polocloud.shared.events.definitions.PlayerLeaveEvent
 import dev.httpmarco.polocloud.shared.player.PolocloudPlayer
@@ -56,7 +57,8 @@ class VelocityBridge @Inject constructor(
                 PolocloudPlayer(
                     player.username,
                     player.uniqueId,
-                    event.server.serverInfo.name
+                    event.server.serverInfo.name,
+                    Polocloud.instance().selfServiceName()
                 )
             )
         )
@@ -74,7 +76,7 @@ class VelocityBridge @Inject constructor(
             return
         }
 
-        updatePolocloudPlayer(PlayerLeaveEvent(PolocloudPlayer(player.username, player.uniqueId, serviceName)))
+        updatePolocloudPlayer(PlayerLeaveEvent(PolocloudPlayer(player.username, player.uniqueId, serviceName, Polocloud.instance().selfServiceName())))
     }
 
     @Subscribe
