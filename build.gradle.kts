@@ -10,7 +10,6 @@ allprojects {
     version = "3.0.0-pre.8-SNAPSHOT"
 
     repositories {
-        mavenLocal()
         mavenCentral()
         maven {
             name = "polocloud-snapshots"
@@ -27,8 +26,6 @@ subprojects {
 
         tasks.shadowJar {
             archiveClassifier.set(null)
-
-            mergeServiceFiles()
         }
     }
     apply(plugin = "maven-publish")
