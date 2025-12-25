@@ -41,10 +41,12 @@ subprojects {
     publishing {
         publications {
             create<MavenPublication>("maven") {
-                from(components["java"])
-
-                artifact(tasks.shadowJar.get()) {
-                    classifier = null
+                if (plugins.hasPlugin("com.gradleup.shadow")) {
+                    artifact(tasks.named("shadowJar")) {
+                        classifier = null
+                    }
+                } else {
+                    from(components["java"])
                 }
 
                 pom {
