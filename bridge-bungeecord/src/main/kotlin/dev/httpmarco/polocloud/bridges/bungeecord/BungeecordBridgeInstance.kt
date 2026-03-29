@@ -20,6 +20,8 @@ import java.net.InetSocketAddress
 
 class BungeecordBridgeInstance : BridgeActorSupportInstance<ServerInfo, ServerInfo>(BungeecordBridgeActor()), Listener {
 
+    private val maxPlayerCache = mutableMapOf<String, Int>()
+
     init {
         this.processBind()
     }
@@ -79,7 +81,18 @@ class BungeecordBridgeInstance : BridgeActorSupportInstance<ServerInfo, ServerIn
 
     override fun registerServerInfo(identifier: ServerInfo, service: Service): ServerInfo {
         ProxyServer.getInstance().servers[identifier.name] = identifier
+
+        updatePing(identifier)
+
         return identifier
+    }
+
+    fun updatePing(server: ServerInfo) {
+        server.ping { ping, error ->
+            if (error == null && ping != null) {
+                maxPlayerCache[server.name] = ping.players.max
+            }
+        }
     }
 
     override fun unregister(identifier: ServerInfo) {
@@ -92,5 +105,9 @@ class BungeecordBridgeInstance : BridgeActorSupportInstance<ServerInfo, ServerIn
 
     override fun playerCount(info: ServerInfo): Int {
         return info.players.size
+    }
+
+    override fun maxPlayers(server: ServerInfo): Int {
+        return maxPlayerCache[server.name] ?: 100
     }
 }
