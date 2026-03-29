@@ -1,6 +1,5 @@
 package dev.httpmarco.polocloud.bridge.api
 
-import com.google.protobuf.Any
 import com.google.protobuf.Message
 import dev.httpmarco.polocloud.bridge.api.actor.BridgeActor
 import dev.httpmarco.polocloud.sdk.java.Polocloud

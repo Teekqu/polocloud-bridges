@@ -19,6 +19,7 @@ import dev.httpmarco.polocloud.shared.service.Service
 import org.bstats.velocity.Metrics
 import java.net.InetSocketAddress
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.jvm.optionals.getOrNull
 
 
@@ -27,6 +28,7 @@ class VelocityBridge @Inject constructor(
     val metricsFactory: Metrics.Factory
 ) : BridgeActorSupportInstance<RegisteredServer, ServerInfo>(VelocityPlayerActorBridge(proxyServer)) {
 
+    private val maxPlayerCache = mutableMapOf<String, Int>()
     private lateinit var metrics: Metrics
 
     init {
@@ -39,6 +41,10 @@ class VelocityBridge @Inject constructor(
     @Subscribe
     fun onInitialize(event: ProxyInitializeEvent) {
         this.processBind()
+
+        proxyServer.scheduler.buildTask(this, Runnable {
+            proxyServer.allServers.forEach { updatePing(it) }
+        }).repeat(10, TimeUnit.SECONDS).schedule()
 
         val pluginId = 26763
         metrics = metricsFactory.make(this, pluginId)
@@ -102,7 +108,17 @@ class VelocityBridge @Inject constructor(
         identifier: ServerInfo,
         service: Service
     ): RegisteredServer {
-        return proxyServer.registerServer(identifier)
+        val registerServer = proxyServer.registerServer(identifier)
+        updatePing(registerServer)
+
+        return registerServer
+    }
+
+    private fun updatePing(server: RegisteredServer) {
+        server.ping().thenAccept { ping ->
+            val max = ping.players.orElse(null)?.max ?: return@thenAccept
+            maxPlayerCache[server.serverInfo.name] = max
+        }
     }
 
     override fun unregister(identifier: RegisteredServer) {
@@ -115,5 +131,9 @@ class VelocityBridge @Inject constructor(
 
     override fun playerCount(info: RegisteredServer): Int {
         return info.playersConnected.size
+    }
+
+    override fun maxPlayers(server: RegisteredServer): Int {
+        return maxPlayerCache[server.serverInfo.name] ?: 100
     }
 }
