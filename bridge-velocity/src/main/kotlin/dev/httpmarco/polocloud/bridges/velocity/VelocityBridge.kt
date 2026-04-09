@@ -73,16 +73,7 @@ class VelocityBridge @Inject constructor(
     @Subscribe
     fun onDisconnect(event: DisconnectEvent) {
         val player = event.player
-
-        val serviceName = player.currentServer
-            .flatMap { Optional.ofNullable(it.serverInfo.name) }
-            .orElse(null)
-        if (serviceName == null) {
-            // Player was not connected to any service
-            return
-        }
-
-        updatePolocloudPlayer(PlayerLeaveEvent(PolocloudPlayer(player.username, player.uniqueId, serviceName, Polocloud.instance().selfServiceName())))
+        updatePolocloudPlayer(PlayerLeaveEvent(PolocloudPlayer(player.username, player.uniqueId, "", "")))
     }
 
     @Subscribe
